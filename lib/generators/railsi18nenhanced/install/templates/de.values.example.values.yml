@@ -1,0 +1,8 @@
+# de.values.example.values.yml
+de:
+  values:
+    example:
+      values:
+        0: "Zero"
+        1: "One"
+        2: "Two"
