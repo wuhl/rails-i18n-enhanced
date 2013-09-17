@@ -64,7 +64,7 @@ module Railsi18nenhanced
           "    d ? I18n.l(d) : \"\"\n" +
           "  end\n" +
           "\n"
-
+        end
         copy_file "de.values.example.values.yml", "config/locales/#{language_type}/#{language_type}.values.example.values.yml"
       end
 
