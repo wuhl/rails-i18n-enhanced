@@ -1,7 +1,7 @@
 module Rails
   module I18n
     module Enhanced
-      VERSION = "0.0.2.alpha"
+      VERSION = "0.0.3"
     end
   end
 end

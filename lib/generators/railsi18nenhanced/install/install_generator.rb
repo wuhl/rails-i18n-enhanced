@@ -58,6 +58,13 @@ module Railsi18nenhanced
           "      Helper.get_generatedynfunctions\n" +
           "    end\n"
         end
+        insert_into_file "app/helpers/application_helper.rb", :after => "module ApplicationHelper\n"
+          "\n" +
+          "  def l(d)\n" +
+          "    d ? I18n.l(d) : \"\"\n" +
+          "  end\n" +
+          "\n"
+
         copy_file "de.values.example.values.yml", "config/locales/#{language_type}/#{language_type}.values.example.values.yml"
       end
 
