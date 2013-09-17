@@ -58,7 +58,7 @@ module Railsi18nenhanced
           "      Helper.get_generatedynfunctions\n" +
           "    end\n"
         end
-        insert_into_file "app/helpers/application_helper.rb", :after => "module ApplicationHelper\n",
+        insert_into_file "app/helpers/application_helper.rb", :after => "module ApplicationHelper\n" do
           "\n" +
           "  def l(d)\n" +
           "    d ? I18n.l(d) : \"\"\n" +
