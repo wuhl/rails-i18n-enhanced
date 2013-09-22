@@ -1,0 +1,28 @@
+# de.rails-i18n.de
+
+de:
+  helpers:
+    actions: "Aktionen"
+    submit:
+      create: "%{model} anlegen"
+      update: "%{model} speichern"
+    links:
+      back: "Zurück"
+      cancel: "Abbrechen"
+      confirm: "Sind Sie sicher?"
+      destroy: "Löschen"
+      new: "Neu"
+      edit: "Bearbeiten"
+      show: "Zeigen"
+      view_all: "Übersicht"
+    titles:
+      index: "Übersicht %{model}"
+      edit: "%{model} bearbeiten"
+      save: "%{model} speichern"
+      new: "%{model} anlegen"
+      delete: "%{model} löschen"
+      show: "%{model} anzeigen"
+    messages:
+      created: "%{model} wurde erfolgreich angelegt."
+      updated: "%{model} wurde erfolgreich bearbeitet."
+      deleted: "%{model} wurde erfolgreich gelöscht."

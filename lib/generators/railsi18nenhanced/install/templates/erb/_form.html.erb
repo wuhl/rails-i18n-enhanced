@@ -1,0 +1,59 @@
+<%-
+  if File.exist? "app/views/layouts/_menu.html.erb"
+    insert_into_file "app/views/layouts/_menu.html.erb",
+      "    \<\%= drop_down t(\'activerecord.models.#{singular_table_name}.other\') do \%\>\n" +
+      "      \<\%= menu_item t(\'helpers.titles.index\', model: #{singular_table_name.camelize}.model_name.human( :count => 2 ) ), #{plural_table_name}_path \%\>\n" + 
+      "      \<\%= menu_item t(\'helpers.titles.new\', model: #{singular_table_name.camelize}.model_name.human), new_#{singular_table_name}_path \%\>\n" +
+      "    \<\% end \%\>\n",
+      :before => "    \<\%= menu_item t(\'menu.about\'), page_path(\'about\') \%\>"
+  end
+  create_file "config/locales/de/de.model.#{singular_table_name}.yml", 
+    "# de.model.#{singular_table_name}.yml\n"+
+    "de:\n" +
+    "  activerecord:\n" +
+    "    models:\n" +
+    "      #{singular_table_name}:\n" +
+    "        one: \"#{singular_table_name}\"\n" +
+    "        other: \"#{plural_table_name}\"\n" +
+    "    attributes:\n" +
+    "      #{singular_table_name}:\n"
+  gsub_file "config/routes.rb", "# root 'welcome#index'\n", "root '#{plural_table_name}#index'\n"
+-%>
+<%%= form_for(@<%= singular_table_name %>) do |f| %>
+  <%% if @<%= singular_table_name %>.errors.any? %>
+    <div id="error_explanation">
+      <h2><%%= pluralize(@<%= singular_table_name %>.errors.count, "error") %> prohibited this <%= singular_table_name %> from being saved:</h2>
+      <ul>
+        <%% @<%= singular_table_name %>.errors.full_messages.each do |msg| %>
+          <li><%%= msg %></li>
+        <%% end %>
+      </ul>
+    </div>
+  <%% end %>
+  <div class="form-inputs">
+  <%- attributes.each do |attribute| -%>
+    <div class="field">
+      <% if attribute.password_digest? -%>
+        <%%= f.label :password %><br>
+        <%%= f.password_field :password %>
+        </div>
+        <div>
+        <%%= f.label :password_confirmation %><br>
+        <%%= f.password_field :password_confirmation %>
+      <% else -%>
+        <%- if attribute.reference? -%>
+          <%%= f.label :<%= attribute.column_name %> %><br>
+          <%%= f.<%= attribute.field_type %> :<%= attribute.column_name %> %>
+        <%- else -%>
+          <%%= f.label :<%= attribute.name %> %><br>
+          <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
+        <%- end -%>
+      <% end -%>
+    </div>
+    <%- append_to_file "config/locales/de/de.model.#{singular_table_name}.yml", "        #{attribute.name}: \"#{attribute.name}\"\n" -%>
+  <%- end -%>
+  </div>
+  <div class="form-actions">
+    <%%= f.button :submit %>
+  </div>
+<%% end %>

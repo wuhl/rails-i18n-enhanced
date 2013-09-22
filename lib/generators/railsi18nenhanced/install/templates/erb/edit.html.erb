@@ -1,0 +1,6 @@
+<h1><%%= t('helpers.titles.edit', model: <%= singular_table_name.titleize %>.model_name.human ) %></h1>
+
+<%%= render 'form' %>
+
+<%%= link_to t('helpers.links.show'), @<%= singular_table_name %> %> |
+<%%= link_to t('helpers.links.back'), <%= index_helper %>_path %>

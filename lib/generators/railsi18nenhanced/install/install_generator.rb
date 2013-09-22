@@ -5,6 +5,7 @@ module Railsi18nenhanced
       source_root File.expand_path("../templates", __FILE__)
       desc "This generator installs Rails I18n Enhanced"
       argument :language_type, :type => :string, :default => 'de', :banner => '*de or other language'
+      class_option :template_engine, desc: 'Template engine to be invoked (erb, haml or slim).'
 
       def add_locales
       	insert_into_file "config/application.rb", :after => "# config.i18n.default_locale = :de\n" do 
@@ -65,7 +66,21 @@ module Railsi18nenhanced
           "  end\n" +
           "\n"
         end
-        copy_file "de.values.example.values.yml", "config/locales/#{language_type}/#{language_type}.values.example.values.yml"
+        copy_file "#{language_type}.values.example.values.yml", "config/locales/#{language_type}/#{language_type}.values.example.values.yml"
+        copy_file "#{language_type}.rails-i18n.yml", "config/locales/#{language_type}/#{language_type}.rails-i18n.yml" 
+      end
+
+      def copy_scaffold_template
+        engine = options[:template_engine]
+        copy_file "#{engine}/_form.html.#{engine}", "lib/templates/#{engine}/scaffold/_form.html.#{engine}"
+        copy_file "#{engine}/edit.html.#{engine}", "lib/templates/#{engine}/scaffold/edit.html.#{engine}"
+        copy_file "#{engine}/index.html.#{engine}", "lib/templates/#{engine}/scaffold/index.html.#{engine}"
+        copy_file "#{engine}/new.html.#{engine}", "lib/templates/#{engine}/scaffold/new.html.#{engine}"
+        copy_file "#{engine}/show.html.#{engine}", "lib/templates/#{engine}/scaffold/show.html.#{engine}"
+      end
+
+      def copy_scaffold_controller
+        copy_file "scaffold_controller/controller.rb", "lib/templates/rails/scaffold_controller/controller.rb"
       end
 
     private

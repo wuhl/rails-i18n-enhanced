@@ -1,0 +1,13 @@
+<h1><%%= t('helpers.titles.show', model: <%= singular_table_name.camelize %>.model_name.human ) %></h1>
+
+<p id="notice"><%%= notice %></p>
+
+<% attributes.reject(&:password_digest?).each do |attribute| -%>
+<p>
+  <strong><%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %>:</strong>
+  <%%= <%= attribute.type.in?([:date]) ? "l " : "" %>@<%= singular_table_name %>.<%= attribute.name %> %>
+</p>
+<%- end -%>
+
+<%%= link_to t('helpers.links.edit'), edit_<%= singular_table_name %>_path(@<%= singular_table_name %>) %> |
+<%%= link_to t('helpers.links.view_all'), <%= index_helper %>_path %>

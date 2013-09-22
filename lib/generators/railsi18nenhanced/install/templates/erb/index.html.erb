@@ -1,0 +1,29 @@
+<h1><%%= t('helpers.titles.index', model: <%= singular_table_name.camelize %>.model_name.human( :count=>2 ) ) %></h1>
+
+<table>
+  <thead>
+    <tr>
+<% attributes.reject(&:password_digest?).each do |attribute| -%>
+      <th><%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %></th>
+<% end -%>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%% @<%= plural_table_name %>.each do |<%= singular_table_name %>| %>
+      <tr>
+<% attributes.reject(&:password_digest?).each do |attribute| -%>
+        <td><%%= <%= attribute.type.in?([:date]) ? "l " : "" %><%= singular_table_name %>.<%= attribute.name %> %></td>
+<% end -%>
+        <td><%%= link_to t('helpers.links.show'), <%= singular_table_name %> %></td>
+        <td><%%= link_to t('helpers.links.edit'), edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %></td>
+        <td><%%= link_to t('helpers.links.destroy'), <%= singular_table_name %>, method: :delete, data: { confirm: t('helpers.links.confirm') } %></td>
+      </tr>
+    <%% end %>
+  </tbody>
+</table>
+
+<p><%%= link_to t('helpers.titles.new', model: <%= singular_table_name.camelize %>.model_name.human ), new_<%= singular_table_name %>_path %></p>
