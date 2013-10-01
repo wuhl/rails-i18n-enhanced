@@ -83,6 +83,10 @@ module Railsi18nenhanced
         copy_file "scaffold_controller/controller.rb", "lib/templates/rails/scaffold_controller/controller.rb"
       end
 
+      def accelerate_rails
+        gsub_file "config/environments/development.rb", "config.assets.debug = false", "config.assets.debug = true"
+      end
+
     private
 
       def normalize(source_dir)
