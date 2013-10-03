@@ -22,7 +22,11 @@ de:
       new: "%{model} anlegen"
       delete: "%{model} löschen"
       show: "%{model} anzeigen"
-    messages:
-      created: "%{model} wurde erfolgreich angelegt."
-      updated: "%{model} wurde erfolgreich bearbeitet."
-      deleted: "%{model} wurde erfolgreich gelöscht."
+  flash:
+    actions:
+      create:
+        notice: "%{model} wurde erfolgreich angelegt."
+      update:
+        notice: "%{model} wurde erfolgreich bearbeitet."
+      deleted:
+        notice: "%{model} wurde erfolgreich gelöscht."

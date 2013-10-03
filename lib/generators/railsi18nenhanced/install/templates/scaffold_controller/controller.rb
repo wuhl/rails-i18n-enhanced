@@ -29,7 +29,7 @@ class <%= controller_class_name %>Controller < ApplicationController
     @<%= singular_table_name %> = <%= orm_class.build(class_name, "#{singular_table_name}_params") %>
 
     if @<%= orm_instance.save %>
-      redirect_to @<%= singular_table_name %>, notice: t('helpers.messages.created', model: <%= "#{singular_table_name.camelize}" %>.model_name.human( :count=>1 ) )
+      redirect_to @<%= singular_table_name %>, notice: t('flash.actions.create.notice', model: <%= "#{singular_table_name.camelize}" %>.model_name.human( :count=>1 ) )
     else
       render action: 'new'
     end
@@ -38,7 +38,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   # PATCH/PUT <%= route_url %>/1
   def update
     if @<%= orm_instance.update("#{singular_table_name}_params") %>
-      redirect_to @<%= singular_table_name %>, notice: t('helpers.messages.updated', model: <%= "#{singular_table_name.camelize}" %>.model_name.human( :count=>1 ) )
+      redirect_to @<%= singular_table_name %>, notice: t('flash.actions.update.notice', model: <%= "#{singular_table_name.camelize}" %>.model_name.human( :count=>1 ) )
     else
       render action: 'edit'
     end
@@ -47,7 +47,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   # DELETE <%= route_url %>/1
   def destroy
     @<%= orm_instance.destroy %>
-    redirect_to <%= index_helper %>_url, notice: t('helpers.messages.deleted', model: <%= "#{singular_table_name.camelize}" %>.model_name.human( :count=>1 ) )
+    redirect_to <%= index_helper %>_url, notice: t('flash.actions.delete.notice', model: <%= "#{singular_table_name.camelize}" %>.model_name.human( :count=>1 ) )
   end
 
   private
