@@ -26,19 +26,16 @@ module Railsi18nenhanced
       end
 
       def add_language
-        copy_file "helper.rb", "app/helpers/helper.rb"
         insert_into_file "app/controllers/application_controller.rb", :after => "  protect_from_forgery with: :exception\n" do 
-          "  include Helper\n" +
-          "\n" +
           "  before_filter :set_locale\n" +
           "\n" +
           "  layout 'application'\n" +
           "\n" +
           "  private\n" +
           "\n" +
-          "    def default_url_options(options={})\n" +
-          "      { :language => I18n.locale }\n" +
-          "    end\n" +
+          "#    def default_url_options(options={})\n" +
+          "#      { :language => I18n.locale }\n" +
+          "#    end\n" +
           "\n" +
           "    def set_locale\n" +
           "      if params[:language] != nil\n" +
@@ -56,7 +53,6 @@ module Railsi18nenhanced
           "          I18n.locale = 'en'\n" +
           "        end\n" +
           "      end\n" +
-          "      Helper.get_generatedynfunctions\n" +
           "    end\n"
         end
         insert_into_file "app/helpers/application_helper.rb", :after => "module ApplicationHelper\n" do
