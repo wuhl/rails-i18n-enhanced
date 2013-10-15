@@ -83,6 +83,15 @@ module Railsi18nenhanced
         gsub_file "config/environments/development.rb", "config.assets.debug = false", "config.assets.debug = true"
       end
 
+      def install_other_gems
+        if File.read("Gemfile").include?("gem 'cocoon'")
+          insert_into_file "app/assets/javascripts/application.js", :before => "//= require_tree .\n" do
+            "//= require cocoon\n"
+          end
+          puts "      Cocoon installed"
+        end
+      end
+
     private
 
       def normalize(source_dir)
