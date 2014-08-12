@@ -1,6 +1,7 @@
 <%-
   require 'yaml'
   translation_file = "doc/translation.yml"
+  translation = []
   one = singular_table_name
   other = plural_table_name
   if File.exist? translation_file
