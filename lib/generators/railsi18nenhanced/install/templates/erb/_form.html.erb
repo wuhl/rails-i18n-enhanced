@@ -1,8 +1,14 @@
 <%-
   require 'yaml'
   translation_file = "doc/translation.yml"
+  one = singular_table_name
+  other = plural_table_name
   if File.exist? translation_file
     translation = YAML::load(File.read(translation_file))
+    if translation['de'][singular_table_name]
+      one = ( translation['de'][singular_table_name]['one'] ? translation['de'][singular_table_name]['one'] : singular_table_name )
+      other = ( translation['de'][singular_table_name]['other'] ? translation['de'][singular_table_name]['other'] : plural_table_name )
+    end
   end
   if File.exist? "app/views/layouts/_menu.html.erb"
     insert_into_file "app/views/layouts/_menu.html.erb",
@@ -11,12 +17,6 @@
       "      \<\%= menu_item t(\'helpers.titles.new\', model: #{singular_table_name.camelize}.model_name.human), new_#{singular_table_name}_path \%\>\n" +
       "    \<\% end \%\>\n",
       :before => "    \<\%= menu_item t(\'menu.about\'), page_path(\'about\') \%\>"
-  end
-  one = singular_table_name
-  other = plural_table_name
-  if translation['de'][singular_table_name]
-    one = ( translation['de'][singular_table_name]['one'] ? translation['de'][singular_table_name]['one'] : singular_table_name )
-    other = ( translation['de'][singular_table_name]['other'] ? translation['de'][singular_table_name]['other'] : plural_table_name )
   end
   create_file "config/locales/de/de.model.#{singular_table_name}.yml",
     "# de.model.#{singular_table_name}.yml\n"+
