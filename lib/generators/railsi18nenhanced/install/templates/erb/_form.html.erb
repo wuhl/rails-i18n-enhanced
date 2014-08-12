@@ -1,7 +1,7 @@
 <%-
   require 'yaml'
   translation_file = "doc/translation.yml"
-  translation = []
+  translation = Array.new
   one = singular_table_name
   other = plural_table_name
   if File.exist? translation_file
@@ -66,12 +66,14 @@
     </div>
     <%-
         value = attribute.name
-        if translation['de']
-          if translation['de'][attribute.name]
-            if translation['de'][attribute.name]['one']
-              value = translation['de'][attribute.name]['one']
-            else
-              value = translation['de'][attribute.name]
+        if !translation.empty?
+          if translation['de']
+            if translation['de'][attribute.name]
+              if translation['de'][attribute.name]['one']
+                value = translation['de'][attribute.name]['one']
+              else
+                value = translation['de'][attribute.name]
+              end
             end
           end
         end
