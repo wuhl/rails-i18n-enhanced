@@ -40,7 +40,7 @@ module Railsi18nenhanced
           "    def set_locale\n" +
           "      logger.debug \"* Accept-Language: #{request.env['HTTP_ACCEPT_LANGUAGE']}\"\n" +
           "      I18n.locale = extract_locale_from_accept_language_header\n" +
-          "      logger.debug "* Locale set to '#{I18n.locale}'"\n" +
+          "      logger.debug \"* Locale set to '#{I18n.locale}'\"\n" +
           "    end\n" +
           "\n" +
           "    def extract_locale_from_accept_language_header\n" +
