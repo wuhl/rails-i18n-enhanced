@@ -8,7 +8,7 @@ module Railsi18nenhanced
       class_option :template_engine, desc: 'Template engine to be invoked (erb, haml or slim).'
 
       def add_locales
-      	insert_into_file "config/application.rb", :after => "# config.i18n.default_locale = :de\n" do 
+      	insert_into_file "config/application.rb", :after => "# config.i18n.default_locale = :de\n" do
       		"    config.encoding = \"utf-8\"\n" +
     			"    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]\n" +
     			"    config.i18n.available_locales = ['en-GB', :#{language_type}]\n" +
@@ -26,7 +26,7 @@ module Railsi18nenhanced
       end
 
       def add_language
-        insert_into_file "app/controllers/application_controller.rb", :after => "  protect_from_forgery with: :exception\n" do 
+        insert_into_file "app/controllers/application_controller.rb", :after => "  protect_from_forgery with: :exception\n" do
           "  before_filter :set_locale\n" +
           "\n" +
           "  layout 'application'\n" +
@@ -38,22 +38,15 @@ module Railsi18nenhanced
           "#    end\n" +
           "\n" +
           "    def set_locale\n" +
-          "      if params[:language] != nil\n" +
-          "        I18n.locale = params[:language]\n" +
-          "      else\n" +
-          "        r = request.env['HTTP_ACCEPT_LANGUAGE']\n" +
-          "        if r\n" +
-          "          r = r.scan(/^[a-z]{2}/).first\n" +
-          "          if ['de'].include? r\n" +
-          "            I18n.locale = r\n" +
-          "          else\n" +
-          "            I18n.locale = 'en'\n" +
-          "          end\n" +
-          "        else\n" +
-          "          I18n.locale = 'en'\n" +
-          "        end\n" +
-          "      end\n" +
+          "      logger.debug \"* Accept-Language: #{request.env['HTTP_ACCEPT_LANGUAGE']}\"\n" +
+          "      I18n.locale = extract_locale_from_accept_language_header\n" +
+          "      logger.debug "* Locale set to '#{I18n.locale}'"\n" +
+          "    end\n" +
+          "\n" +
+          "    def extract_locale_from_accept_language_header\n" +
+          "      request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first\n" +
           "    end\n"
+          "\n"
         end
         insert_into_file "app/helpers/application_helper.rb", :after => "module ApplicationHelper\n" do
           "\n" +
@@ -63,7 +56,7 @@ module Railsi18nenhanced
           "\n"
         end
         copy_file "#{language_type}.values.example.values.yml", "config/locales/#{language_type}/#{language_type}.values.example.values.yml"
-        copy_file "#{language_type}.rails-i18n.yml", "config/locales/#{language_type}/#{language_type}.rails-i18n.yml" 
+        copy_file "#{language_type}.rails-i18n.yml", "config/locales/#{language_type}/#{language_type}.rails-i18n.yml"
       end
 
       def copy_scaffold_template
