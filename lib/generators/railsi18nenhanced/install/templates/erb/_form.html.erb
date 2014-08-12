@@ -5,9 +5,11 @@
   other = plural_table_name
   if File.exist? translation_file
     translation = YAML::load(File.read(translation_file))
-    if translation['de'][singular_table_name]
-      one = ( translation['de'][singular_table_name]['one'] ? translation['de'][singular_table_name]['one'] : singular_table_name )
-      other = ( translation['de'][singular_table_name]['other'] ? translation['de'][singular_table_name]['other'] : plural_table_name )
+    if translation['de']
+      if translation['de'][singular_table_name]
+        one = ( translation['de'][singular_table_name]['one'] ? translation['de'][singular_table_name]['one'] : singular_table_name )
+        other = ( translation['de'][singular_table_name]['other'] ? translation['de'][singular_table_name]['other'] : plural_table_name )
+      end
     end
   end
   if File.exist? "app/views/layouts/_menu.html.erb"
@@ -63,11 +65,13 @@
     </div>
     <%-
         value = attribute.name
-        if translation['de'][attribute.name]
-          if translation['de'][attribute.name]['one']
-            value = translation['de'][attribute.name]['one']
-          else
-            value = translation['de'][attribute.name]
+        if translation['de']
+          if translation['de'][attribute.name]
+            if translation['de'][attribute.name]['one']
+              value = translation['de'][attribute.name]['one']
+            else
+              value = translation['de'][attribute.name]
+            end
           end
         end
         append_to_file "config/locales/de/de.model.#{singular_table_name}.yml", "        #{attribute.name}: \"#{value}\"\n"
