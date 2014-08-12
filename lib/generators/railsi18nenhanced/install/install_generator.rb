@@ -45,7 +45,7 @@ module Railsi18nenhanced
           "\n" +
           "    def extract_locale_from_accept_language_header\n" +
           "      request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first\n" +
-          "    end\n"
+          "    end\n" +
           "\n"
         end
         insert_into_file "app/helpers/application_helper.rb", :after => "module ApplicationHelper\n" do
