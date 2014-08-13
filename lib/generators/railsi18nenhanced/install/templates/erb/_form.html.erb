@@ -47,22 +47,22 @@
   <div class="form-inputs">
   <%- attributes.each do |attribute| -%>
     <div class="field">
-      <% if attribute.password_digest? -%>
-        <%%= f.label :password %><br>
-        <%%= f.password_field :password %>
-        </div>
-        <div>
-        <%%= f.label :password_confirmation %><br>
-        <%%= f.password_field :password_confirmation %>
-      <% else -%>
+      <%- if attribute.password_digest? -%>
+      <%%= f.label :password %><br>
+      <%%= f.password_field :password %>
+    </div>
+    <div>
+      <%%= f.label :password_confirmation %><br>
+      <%%= f.password_field :password_confirmation %>
+      <%- else -%>
         <%- if attribute.reference? -%>
-          <%%= f.label :<%= attribute.column_name %> %><br>
-          <%%= f.<%= attribute.field_type %> :<%= attribute.column_name %> %>
+      <%%= f.label :<%= attribute.column_name %> %><br>
+      <%%= f.<%= attribute.field_type %> :<%= attribute.column_name %> %>
         <%- else -%>
-          <%%= f.label :<%= attribute.name %> %><br>
-          <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
+      <%%= f.label :<%= attribute.name %> %><br>
+      <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
         <%- end -%>
-      <% end -%>
+      <%- end -%>
     </div>
     <%-
         value = attribute.name
