@@ -31,7 +31,7 @@
     "        other: \"#{other}\"\n" +
     "    attributes:\n" +
     "      #{singular_table_name}:\n"
-  gsub_file "config/routes.rb", "# root 'welcome#index'\n", "root '#{plural_table_name}#index'\n"
+  gsub_file "config/routes.rb", "# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html\nend", "# For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html\n  root '#{plural_table_name}#index'\nend"
 -%>
 <%%= form_for(@<%= singular_table_name %>) do |f| %>
   <%% if @<%= singular_table_name %>.errors.any? %>
