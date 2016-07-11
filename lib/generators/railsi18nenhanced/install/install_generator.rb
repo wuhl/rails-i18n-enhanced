@@ -8,12 +8,18 @@ module Railsi18nenhanced
       class_option :template_engine, desc: 'Template engine to be invoked (erb, haml or slim).'
 
       def add_locales
-      	insert_into_file "config/application.rb", :after => "# config.i18n.default_locale = :de\n" do
-      		"    config.encoding = \"utf-8\"\n" +
-    			"    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]\n" +
-    			"    config.i18n.available_locales = ['en-GB', :#{language_type}]\n" +
-    			"    config.i18n.default_locale = :#{language_type}\n"
-				end
+        insert_into_file "config/application.rb", :after => "class Application < Rails::Application\n" do
+          "    config.encoding = \'utf-8\'\n" +
+          "    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]\n" +
+          "    config.i18n.available_locales = ['en-GB', :#{language_type}]\n" +
+          "    config.i18n.default_locale = :#{language_type}\n"
+        end
+      	# insert_into_file "config/application.rb", :after => "# config.i18n.default_locale = :de\n" do
+      	# 	"    config.encoding = \"utf-8\"\n" +
+    			# "    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]\n" +
+    			# "    config.i18n.available_locales = ['en-GB', :#{language_type}]\n" +
+    			# "    config.i18n.default_locale = :#{language_type}\n"
+       #  end
       end
 
       def create_language_directories
