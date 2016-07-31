@@ -57,14 +57,12 @@
     <div>
       <%%= f.label :password_confirmation %>
       <%%= f.password_field :password_confirmation %>
-      <%- else -%>
-        <%- if attribute.reference? -%>
+      <%- elsif attribute.reference? -%>
       <%%= f.label :<%= attribute.column_name %> %>
       <%%= f.<%= attribute.field_type %> :<%= attribute.column_name %> %>
-        <%- else -%>
+      <%- else -%>
       <%%= f.label :<%= attribute.name %> %>
       <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
-        <%- end -%>
       <%- end -%>
     </div>
     <%-
