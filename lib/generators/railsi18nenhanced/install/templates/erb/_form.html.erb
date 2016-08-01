@@ -64,8 +64,10 @@
         s = File.read("doc/foreignkey_#{attribute.singular_name}.rb")
         f = "app/models/#{attribute.singular_name}.rb"
         if File.exist? f
-          insert_into_file f, :before => "\nend" do
-            "\n\n#{s}"
+          if ! File.foreach(f).grep(/foreignkey_value/).any?
+            insert_into_file f, :before => "\nend" do
+              "\n\n#{s}"
+            end
           end
         end
       -%>
