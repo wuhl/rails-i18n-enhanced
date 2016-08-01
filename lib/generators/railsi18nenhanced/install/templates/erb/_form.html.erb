@@ -58,8 +58,17 @@
       <%%= f.label :password_confirmation %>
       <%%= f.password_field :password_confirmation %>
       <%- elsif attribute.reference? -%>
-      <%%= f.label :<%= attribute.column_name %> %>
-      <%%= f.<%= attribute.field_type %> :<%= attribute.column_name %> %>
+      <%%= f.label :<%= attribute.singular_name %> %>
+      <%%= f.collection_select :<%= attribute.column_name %>, <%= attribute.singular_name.camelize %>.all, :id, :foreignkey_value, prompt: true %>
+      <%-
+        s = File.read("doc/foreignkey_#{attribute.singular_name}.rb")
+        f = "app/models/#{attribute.singular_name}.rb"
+        if File.exist? f
+          insert_into_file f, :before => "\nend" do
+            "\n\n#{s}"
+          end
+        end
+      -%>
       <%- else -%>
       <%%= f.label :<%= attribute.name %> %>
       <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
