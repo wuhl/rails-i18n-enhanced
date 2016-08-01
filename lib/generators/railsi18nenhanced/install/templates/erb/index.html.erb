@@ -15,9 +15,13 @@
   <tbody>
     <%% @<%= plural_table_name %>.each do |<%= singular_table_name %>| %>
       <tr>
-<% attributes.reject(&:password_digest?).each do |attribute| -%>
-        <td><%%= <%= attribute.type.in?([:date]) ? "l " : "" %><%= singular_table_name %>.<%= attribute.name %> %></td>
-<% end -%>
+        <% attributes.reject(&:password_digest?).each do |attribute| -%>
+          <%- if attribute.reference? -%>
+            <td><%%= <%= singular_table_name %>.<%= attribute.name %>.foreignkey_value %></td>
+          <%- else -%>
+            <td><%%= <%= attribute.type.in?([:date]) ? "l " : "" %><%= singular_table_name %>.<%= attribute.name %> %></td>
+          <%- end -%>
+        <% end -%>
         <td><%%= link_to t('helpers.links.show'), <%= singular_table_name %> %></td>
         <td><%%= link_to t('helpers.links.edit'), edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %></td>
         <td><%%= link_to t('helpers.links.destroy'), <%= singular_table_name %>, method: :delete, data: { confirm: t('helpers.links.confirm') } %></td>
