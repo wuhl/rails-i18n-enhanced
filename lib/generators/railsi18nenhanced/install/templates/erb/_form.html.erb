@@ -58,7 +58,14 @@
     <%%= f.label :<%= attribute.singular_name %> %>
     <%%= f.collection_select :<%= attribute.column_name %>, <%= attribute.singular_name.camelize %>.all, :id, :foreignkey_value, prompt: true %>
     <%-
-      s = File.read("doc/foreignkey_#{attribute.singular_name}.rb")
+      t = "doc/foreignkey_#{attribute.singular_name}.rb"
+      if File.exist? t
+        s = File.read(t)
+      else
+        s = "  def foreignkey_value\n" +
+            "    return \"Please adjust file app/models/#{attribute.singular_name}.rb\"\n" +
+            "  end\n"
+      end
       f = "app/models/#{attribute.singular_name}.rb"
       if File.exist? f
         if ! File.foreach(f).grep(/foreignkey_value/).any?
