@@ -33,7 +33,7 @@ module Railsi18nenhanced
 
       def add_language
         insert_into_file "app/controllers/application_controller.rb", :after => "  protect_from_forgery with: :exception\n" do
-          "  before_filter :set_locale\n" +
+          "  before_action :set_locale\n" +
           "\n" +
           "  layout 'application'\n" +
           "\n" +
