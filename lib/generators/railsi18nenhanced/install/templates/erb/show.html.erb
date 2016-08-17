@@ -5,7 +5,11 @@
 <% attributes.reject(&:password_digest?).each do |attribute| -%>
 <p>
   <strong><%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %>:</strong>
-  <%%= <%= attribute.type.in?([:date]) ? "l " : "" %>@<%= singular_table_name %>.<%= attribute.name %> %>
+  <%- if attribute.reference? -%>
+    <td><%%= @<%= singular_table_name %>.<%= attribute.name %>.foreignkey_value %></td>
+  <%- else -%>
+    <td><%%= <%= attribute.type.in?([:date]) ? "l " : "" %>@<%= singular_table_name %>.<%= attribute.name %> %></td>
+  <%- end -%>
 </p>
 <%- end -%>
 

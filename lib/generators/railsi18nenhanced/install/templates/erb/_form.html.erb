@@ -14,12 +14,15 @@
     end
   end
   if File.exist? "app/views/layouts/_menu.html.erb"
-    insert_into_file "app/views/layouts/_menu.html.erb",
-      "    \<\%= drop_down t(\'activerecord.models.#{singular_table_name}.other\') do \%\>\n" +
-      "      \<\%= menu_item t(\'helpers.titles.index\', model: #{singular_table_name.camelize}.model_name.human( :count => 2 ) ), #{plural_table_name}_path \%\>\n" +
-      "      \<\%= menu_item t(\'helpers.titles.new\', model: #{singular_table_name.camelize}.model_name.human), new_#{singular_table_name}_path \%\>\n" +
-      "    \<\% end \%\>\n",
-      :before => "    \<\%= menu_item t(\'menu.about\'), page_path(\'about\') \%\>"
+      insert_into_file "app/views/layouts/_menu.html.erb", :before =>
+          "    <li class=\"nav-item\"\>\n" +
+          "      <a class=\"nav-link\" href=<%= page_path('about') %\>\><%= t('menu.about') %\></a\>\n" +
+          "    </li\>" do
+        "    <li class=\"nav-item active\"\>\n" +
+        "      <a class=\"nav-link\" href=<%= #{plural_table_name}_path %\>\>" +
+        "<%= #{class_name}.model_name.human %\><span class=\"sr-only\"\>(current)</span\></a\>\n" +
+        "    </li\>\n"
+      end
   end
   create_file "config/locales/de/de.model.#{singular_table_name}.yml",
     "# de.model.#{singular_table_name}.yml\n"+
@@ -45,41 +48,53 @@
     </div>
   <%% end %>
   <div class="form-inputs">
-  <%- attributes.each do |attribute| -%>
-    <div class="field">
-      <%- if attribute.password_digest? -%>
-      <%%= f.label :password %>
-      <%%= f.password_field :password %>
-    </div>
-    <div>
-      <%%= f.label :password_confirmation %>
-      <%%= f.password_field :password_confirmation %>
-      <%- else -%>
-        <%- if attribute.reference? -%>
-      <%%= f.label :<%= attribute.column_name %> %>
-      <%%= f.<%= attribute.field_type %> :<%= attribute.column_name %> %>
-        <%- else -%>
-      <%%= f.label :<%= attribute.name %> %>
-      <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
-        <%- end -%>
-      <%- end -%>
-    </div>
+    <%- attributes.each do |attribute| -%>
+    <%- if attribute.password_digest? -%>
+    <%%= f.label :password %>
+    <%%= f.password_field :password %>
+    <%%= f.label :password_confirmation %>
+    <%%= f.password_field :password_confirmation %>
+    <%- elsif attribute.reference? -%>
+    <%%= f.label :<%= attribute.singular_name %> %>
+    <%%= f.collection_select :<%= attribute.column_name %>, <%= attribute.singular_name.camelize %>.all, :id, :foreignkey_value, prompt: true %>
     <%-
-        value = attribute.name
-        if !translation.empty?
-          if translation['de']
-            if translation['de'][attribute.name]
-              if translation['de'][attribute.name]['one']
-                value = translation['de'][attribute.name]['one']
-              else
-                value = translation['de'][attribute.name]
-              end
+      t = "doc/foreignkey_#{attribute.singular_name}.rb"
+      if File.exist? t
+        s = File.read(t)
+      else
+        s = "  def foreignkey_value\n" +
+            "    return \"Please adjust file app/models/#{attribute.singular_name}.rb\"\n" +
+            "  end\n"
+      end
+      f = "app/models/#{attribute.singular_name}.rb"
+      if File.exist? f
+        if ! File.foreach(f).grep(/foreignkey_value/).any?
+          insert_into_file f, :before => "\nend" do
+            "\n\n#{s}"
+          end
+        end
+      end
+    -%>
+    <%- else -%>
+    <%%= f.label :<%= attribute.name %> %>
+    <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
+    <%- end -%>
+    <%-
+      value = attribute.name
+      if !translation.empty?
+        if translation['de']
+          if translation['de'][attribute.name]
+            if translation['de'][attribute.name]['one']
+              value = translation['de'][attribute.name]['one']
+            else
+              value = translation['de'][attribute.name]
             end
           end
         end
-        append_to_file "config/locales/de/de.model.#{singular_table_name}.yml", "        #{attribute.name}: \"#{value}\"\n"
+      end
+      append_to_file "config/locales/de/de.model.#{singular_table_name}.yml", "        #{attribute.name}: \"#{value}\"\n"
     -%>
-  <%- end -%>
+    <%- end -%>
   </div>
   <div class="form-actions">
     <%%= f.submit %>

@@ -1,4 +1,4 @@
-<h1><%%= t('helpers.titles.edit', model: <%= singular_table_name.titleize %>.model_name.human ) %></h1>
+<h1><%%= t('helpers.titles.edit', model: <%= singular_table_name.camelize %>.model_name.human ) %></h1>
 
 <%%= render 'form' %>
 
