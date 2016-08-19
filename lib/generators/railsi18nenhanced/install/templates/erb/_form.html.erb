@@ -58,7 +58,7 @@
     <%%= f.label :<%= attribute.singular_name %> %>
     <%%= f.collection_select :<%= attribute.column_name %>, <%= attribute.singular_name.camelize %>.all, :id, :foreignkey_value, prompt: true %>
     <%-
-      t = "doc/foreignkey_#{attribute.singular_name}.rb"
+      t = "../template/foreignkey_#{attribute.singular_name}.rb"
       if File.exist? t
         s = File.read(t)
       else
