@@ -17,12 +17,14 @@
       <tr>
         <% attributes.reject(&:password_digest?).each do |attribute| -%>
           <%- if attribute.reference? -%>
-            <td><%%= <%= singular_table_name %>.<%= attribute.name %>.foreignkey_value %></td>
+<td><%%= <%= singular_table_name %>.<%= attribute.name %>.foreignkey_value %></td>
+          <%- elsif attribute.type.in?([:decimal]) -%>
+<td><%%= number_with_precision(<%= singular_table_name %>.<%= attribute.name %> <%= attribute.attr_options && attribute.attr_options[:scale] ? ", precision: #{attribute.attr_options[:scale]}" : "" %>) %></td>
           <%- else -%>
-            <td><%%= <%= attribute.type.in?([:date]) ? "l " : "" %><%= singular_table_name %>.<%= attribute.name %> %></td>
+<td><%%= <%= attribute.type.in?([:date]) ? "l " : "" %><%= singular_table_name %>.<%= attribute.name %> %></td>
           <%- end -%>
         <% end -%>
-        <td><%%= link_to t('helpers.links.show'), <%= singular_table_name %> %></td>
+<td><%%= link_to t('helpers.links.show'), <%= singular_table_name %> %></td>
         <td><%%= link_to t('helpers.links.edit'), edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %></td>
         <td><%%= link_to t('helpers.links.destroy'), <%= singular_table_name %>, method: :delete, data: { confirm: t('helpers.links.confirm') } %></td>
       </tr>

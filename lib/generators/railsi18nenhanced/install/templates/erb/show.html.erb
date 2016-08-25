@@ -7,6 +7,8 @@
   <strong><%%= t('activerecord.attributes.<%= singular_table_name %>.<%= attribute.name %>') %>:</strong>
   <%- if attribute.reference? -%>
     <td><%%= @<%= singular_table_name %>.<%= attribute.name %>.foreignkey_value %></td>
+  <%- elsif attribute.type.in?([:decimal]) -%>
+    <td><%%= number_with_precision(@<%= singular_table_name %>.<%= attribute.name %><%= attribute.attr_options && attribute.attr_options[:scale] ? ", precision: #{attribute.attr_options[:scale]}" : "" %>) %></td>
   <%- else -%>
     <td><%%= <%= attribute.type.in?([:date]) ? "l " : "" %>@<%= singular_table_name %>.<%= attribute.name %> %></td>
   <%- end -%>

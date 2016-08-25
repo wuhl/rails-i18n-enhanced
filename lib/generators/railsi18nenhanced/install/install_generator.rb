@@ -27,7 +27,6 @@ module Railsi18nenhanced
         empty_directory "config/locales/#{language_type}"
         normalize "config/locales"
         move "config/locales", "config/locales/en"
-        copy "config/locales/en", "config/locales/#{language_type}"
         rename "config/locales/#{language_type}", "#{language_type}"
       end
 
@@ -61,6 +60,7 @@ module Railsi18nenhanced
           "  end\n" +
           "\n"
         end
+        copy_file "#{language_type}.yml", "config/locales/#{language_type}/#{language_type}.yml"
         copy_file "#{language_type}.values.example.values.yml", "config/locales/#{language_type}/#{language_type}.values.example.values.yml"
         copy_file "#{language_type}.rails-i18n.yml", "config/locales/#{language_type}/#{language_type}.rails-i18n.yml"
       end
@@ -80,6 +80,18 @@ module Railsi18nenhanced
 
       def accelerate_rails
         gsub_file "config/environments/development.rb", "config.assets.debug = false", "config.assets.debug = true"
+      end
+
+      def install_high_voltage
+        if File.read("Gemfile").include?("gem 'high_voltage'")
+          copy_file "high_voltage.rb", "config/initializers/high_voltage.rb"
+        end
+      end
+
+      def install_better_errors
+        if File.read("Gemfile").include?("gem 'better_errors'")
+          copy_file "better_errors.rb", "config/initializers/better_errors.rb"
+        end
       end
 
       def install_other_gems
