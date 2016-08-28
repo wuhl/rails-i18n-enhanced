@@ -63,6 +63,10 @@ module Railsi18nenhanced
         copy_file "#{language_type}.yml", "config/locales/#{language_type}/#{language_type}.yml"
         copy_file "#{language_type}.values.example.values.yml", "config/locales/#{language_type}/#{language_type}.values.example.values.yml"
         copy_file "#{language_type}.rails-i18n.yml", "config/locales/#{language_type}/#{language_type}.rails-i18n.yml"
+        app = destination_root.split('/').last.upcase!
+        insert_into_file "config/locales/#{language_type}/#{language_type}.rails-i18n.yml", :after => "#{language_type}:\n" do
+          "  title: #{app}\n"
+        end
       end
 
       def copy_scaffold_template

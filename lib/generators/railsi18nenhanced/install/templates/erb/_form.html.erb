@@ -20,7 +20,6 @@
         "        <ul class=\"dropdown-menu\">\n" +
         "        </ul>\n" +
         "      </li>\n")
-      puts "Fall 1"
       insert_into_file "app/views/layouts/_menu.html.erb", :before =>
         "        </ul>\n" +
         "      </li>\n" do
@@ -28,7 +27,6 @@
         "          <li><a class=\"nav-link\" href=<%= new_#{singular_table_name}_path %\>><%= t('helpers.titles.new', model: #{class_name}.model_name.human) %\><span class=\"sr-only\">(current)</span></a></li>\n"
       end
     else
-      puts "Fall 2"
       insert_into_file "app/views/layouts/_menu.html.erb", :before =>
         "        </ul>\n" +
         "      </li>\n" do
