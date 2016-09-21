@@ -65,7 +65,8 @@ module Railsi18nenhanced
         copy_file "#{language_type}.rails-i18n.yml", "config/locales/#{language_type}/#{language_type}.rails-i18n.yml"
         app = destination_root.split('/').last.upcase!
         insert_into_file "config/locales/#{language_type}/#{language_type}.rails-i18n.yml", :after => "#{language_type}:\n" do
-          "  title: #{app}\n"
+          "  title: #{app}\n" +
+          "  search: 'Suchen'\n"
         end
       end
 
@@ -103,7 +104,6 @@ module Railsi18nenhanced
           insert_into_file "app/assets/javascripts/application.js", :before => "//= require_tree .\n" do
             "//= require cocoon\n"
           end
-          puts "      Cocoon installed"
         end
       end
 

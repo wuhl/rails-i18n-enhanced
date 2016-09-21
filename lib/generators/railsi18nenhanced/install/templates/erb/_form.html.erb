@@ -68,6 +68,72 @@
     <%%= f.label :password_confirmation %>
     <%%= f.password_field :password_confirmation %>
     <%- elsif attribute.reference? -%>
+    <%-
+      if attribute.type == :belongs_to
+
+        # Master-Model
+        f = "app/models/#{attribute.name}.rb"
+        s = "  has_many :#{plural_table_name}, dependent: :destroy, inverse_of: :#{attribute.name}\n" +
+            "  accepts_nested_attributes_for :#{plural_table_name}, allow_destroy: true\n"
+        if File.exist? f
+          insert_into_file f, :before => "\nend" do
+            "\n\n#{s}"
+          end
+        end
+
+        # Master-Controller
+        f = "app/controllers/#{attribute.name.pluralize}_controller.rb"
+        s1 = attributes.map { |m| m.type == :belongs_to ? ":#{m.name}_id" : ":#{m.name}"}.join(", ")
+        s = ", #{plural_table_name}_attributes: [:id, #{s1}, :_destroy]"
+        if File.exist? f
+          insert_into_file f, :before => ")\n" +
+            "    end" +
+            "\nend" do
+            "#{s}"
+          end
+        end
+
+        # Slave-View-Form
+        f = "app/views/#{attribute.name.pluralize}/_#{singular_table_name}_fields.html.erb"
+        s1 = ""
+        attributes.each do |a|
+          if a.in?([:decimal]) && a.attr_options && a.attr_options[:scale]
+            s1 = s1 + "\n" +
+            "  <%= f.label :#{a.name} %\>\n" +
+            "  <%= f.number_field :#{a.name}, step: #{1.to_f / 10 ** a.attr_options[:scale]} %\>\n"
+          elsif not a.password_digest? and not a.reference?
+            s1 = s1 + "\n" +
+            "  <%= f.label :#{a.name} %\>\n" +
+            "  <%= f.#{a.field_type} :#{a.name} %\>\n"
+          end
+        end
+        s = "<div class=\"nested-fields\">\n" +
+            "#{s1}\n" +
+            "  <%= link_to_remove_association t('helpers.titles.delete', :model => #{table_name.classify}.model_name.human), f %\>\n" +
+            "</div>\n"
+        create_file f, s
+
+        # Master-View-Form
+        f = "app/views/#{attribute.name.pluralize}/_form.html.erb"
+        s1 = "activerecord.models.#{singular_table_name}.other"
+        s = "    <div>\n" +
+            "      <p><strong><%= t('#{s1}') %\>:</strong></p>\n" +
+            "      <div id=\"#{table_name}\">\n" +
+            "        <%= f.fields_for :#{table_name} do \|slave\| %\>\n" +
+            "          <%= render '#{singular_table_name}_fields', f: slave %\>\n" +
+            "        <% end %\>\n" +
+            "        <div class=\"links\">\n" +
+            "          <%= link_to_add_association t('helpers.titles.new', :model => #{table_name.classify}.model_name.human), f, :#{table_name} %\>\n" +
+            "        </div>\n" +
+            "      </div>\n" +
+            "    </div>"
+        if File.exist? f
+          insert_into_file f, :before => "  </div>\n" + "  <div class=\"form-actions\">" do
+            "#{s}\n"
+          end
+        end
+      end
+    -%>
     <%%= f.label :<%= attribute.singular_name %> %>
     <%%= f.collection_select :<%= attribute.column_name %>, <%= attribute.singular_name.camelize %>.all, :id, :foreignkey_value, prompt: true %>
     <%-
