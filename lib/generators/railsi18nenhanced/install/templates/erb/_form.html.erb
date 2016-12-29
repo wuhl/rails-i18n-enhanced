@@ -14,9 +14,9 @@
     end
   end
 
-  if File.exist? "app/views/layouts/_menu.html.erb"
+  if File.exist? File.join(File::SEPARATOR , 'app', 'views', 'layouts', '_menu.html.erb')
     # if File.read("app/views/layouts/_menu.html.erb").include?("        <ul class=\"dropdown-menu\">\n        </ul>\n")
-    if File.read("app/views/layouts/_menu.html.erb").include?(
+    if File.read(File.join(File::SEPARATOR , 'app', 'views', 'layouts', '_menu.html.erb')).include?(
         "        <ul class=\"dropdown-menu\">\n" +
         "        </ul>\n" +
         "      </li>\n")
